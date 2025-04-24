@@ -30,7 +30,7 @@
                     Margin="0,2,0,16"
                     Width="200"
                     HorizontalAlignment="Left">
-                    <controls:FrostyWatermarkTextBox WatermarkText="Ability Identifier"
+                    <controls:FrostyWatermarkTextBox WatermarkText="Affector Identifier"
                         KeyUp="IdInput_OnKeyUp"
                         x:Name="IdInput"
                         Height="24"
