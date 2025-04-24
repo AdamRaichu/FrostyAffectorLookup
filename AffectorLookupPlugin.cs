@@ -24,7 +24,7 @@ namespace AffectorLookupPlugin
         public override ImageSource Icon => new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyEditor;component/Images/Database.png") as ImageSource;
 
         public static string CacheDirectory = System.AppDomain.CurrentDomain.BaseDirectory + @"Plugins\Caches\";
-        public static string CacheFilePath = CacheDirectory + Enum.GetName(typeof(ProfileVersion), ProfilesLibrary.DataVersion) + "AffectorLookupPlugin_Cache.cache";
+        public static string CacheFilePath = CacheDirectory + Enum.GetName(typeof(ProfileVersion), ProfilesLibrary.DataVersion) + "_AffectorLookupPlugin_Cache.cache";
         public static int version = 0x00000002;
 
         public override RelayCommand MenuItemClicked => new RelayCommand((o) =>
