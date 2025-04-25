@@ -22,6 +22,6 @@ using AffectorLookupPlugin;
 
 [assembly: PluginDisplayName("Affector Lookup Plugin")]
 [assembly: PluginAuthor("AdamRaichu")]
-[assembly: PluginVersion("1.0.0.0")]
+[assembly: PluginVersion("1.0.0.3")]
 [assembly: RegisterMenuExtension(typeof(AffectorGenerateCacheMenuExtension))]
 [assembly: RegisterMenuExtension(typeof(ViewAffectorLookupWindow))]

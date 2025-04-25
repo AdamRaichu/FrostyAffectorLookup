@@ -25,7 +25,7 @@ namespace AffectorLookupPlugin
 
         public static string CacheDirectory = System.AppDomain.CurrentDomain.BaseDirectory + @"Plugins\Caches\";
         public static string CacheFilePath = CacheDirectory + Enum.GetName(typeof(ProfileVersion), ProfilesLibrary.DataVersion) + "_AffectorLookupPlugin_Cache.cache";
-        public static int version = 0x00000002;
+        public static int version = 0x00000003;
 
         public override RelayCommand MenuItemClicked => new RelayCommand((o) =>
         {
@@ -56,22 +56,32 @@ namespace AffectorLookupPlugin
 
                 task.Update($"Processing ({index + 1}/{count}): {affectorEntry.Filename}", index / count * 50);
                 dynamic root = affectorAsset.RootObject;
-                if (ids.Contains(root.Identifier)) { }
-                ids.Add(root.Identifier);
-                reasons.Add("asset.Identifier");
-                paths.Add(affectorEntry.Name);
-                if (ids.Contains(root.Identifier) && !idsWithDuplicates.Contains(root.Identifier))
+                if (ids.Contains(root.Identifier))
                 {
-                    idsWithDuplicates.Add(root.Identifier);
+                    if (!idsWithDuplicates.Contains(root.Identifier))
+                    {
+                        idsWithDuplicates.Add(root.Identifier);
+                    }
+                } else
+                {
+                    ids.Add(root.Identifier);
+                    reasons.Add("asset.Identifier");
+                    paths.Add(affectorEntry.Name);
                 }
                 List<UInt32> descriptorIds = (List<UInt32>) root.DescriptorIds;
                 for (int i = 0; i < descriptorIds.Count; i++) {
-                    ids.Add(descriptorIds[i]);
-                    reasons.Add($"asset.DescriptorIds[{i}]");
-                    paths.Add(affectorEntry.Name);
-                    if (ids.Contains(descriptorIds[i]) && !idsWithDuplicates.Contains(descriptorIds[i]))
+                    
+                    if (ids.Contains(descriptorIds[i]))
                     {
-                        idsWithDuplicates.Add(descriptorIds[i]);
+                        if (!idsWithDuplicates.Contains(descriptorIds[i]))
+                        {
+                            idsWithDuplicates.Add(descriptorIds[i]);
+                        }
+                    } else
+                    {
+                        ids.Add(descriptorIds[i]);
+                        reasons.Add($"asset.DescriptorIds[{i}]");
+                        paths.Add(affectorEntry.Name);
                     }
                 }
                 index++;

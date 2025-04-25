@@ -16,7 +16,7 @@ namespace AffectorLookupPlugin.Windows
     {
         private readonly Dictionary<uint, string> idToNameMap = new Dictionary<uint, string>();
         private readonly Dictionary<uint, string> idToReasonMap = new Dictionary<uint, string>();
-        private readonly Dictionary<uint, bool> idToIsDupeMap = new Dictionary<uint, bool>();
+        private readonly List<uint> idsWithDuplicates = new List<uint>();
         public bool cacheReadFailed = false;
         private bool lookupFailed = true;
 
@@ -53,6 +53,7 @@ namespace AffectorLookupPlugin.Windows
             {
                 AffectorPath.Text = ex is FormatException ? "Invalid Id (make sure you only put in numbers)" : "Invalid Id (value too large to be a UInt32)";
                 AffectorReason.Text = "Reference details will appear here";
+                DuplicateWarning.Visibility = Visibility.Collapsed;
                 lookupFailed = true;
                 setOpenAssetButton_IsEnabled(lookupFailed);
                 return;
@@ -60,8 +61,7 @@ namespace AffectorLookupPlugin.Windows
 
             bool foundValue = idToNameMap.TryGetValue(value, out string name);
             idToReasonMap.TryGetValue(value, out string reason);
-            idToIsDupeMap.TryGetValue(value, out bool isDupe);
-            isDupe = isDupe || false;
+            bool isDupe = idsWithDuplicates.Contains(value);
 
             if (foundValue)
             {
@@ -73,6 +73,8 @@ namespace AffectorLookupPlugin.Windows
             else
             {
                 AffectorPath.Text = "Asset not found for id. (Maybe this id is from an added affector?)";
+                AffectorReason.Text = "Reference details will appear here";
+                DuplicateWarning.Visibility = Visibility.Collapsed;
                 lookupFailed = true;
             }
             setOpenAssetButton_IsEnabled(lookupFailed);
@@ -126,7 +128,7 @@ namespace AffectorLookupPlugin.Windows
                 for (int i = 0; i < dupeCount; i++)
                 {
                     uint id = reader.ReadUInt();
-                    idToIsDupeMap[id] = true;
+                    idsWithDuplicates.Add(id);
                 }
             }
             return true;
